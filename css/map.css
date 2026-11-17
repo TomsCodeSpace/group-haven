@@ -1,0 +1,331 @@
+﻿
+/*
+==================================================
+FILE: map.css
+
+PURPOSE:
+Controls the map interface and everything positioned
+directly on the map.
+
+RESPONSIBILITIES:
+- Map background and decorative details
+- Roads, parks, and location labels
+- Map controls
+- Event pins and selected pin states
+- Draggable event creation pin
+- Selected coordinate display
+
+DEPENDENCIES:
+- main.css (global variables and application layout)
+
+==================================================
+*/
+
+
+/* =================================================
+   1. MAP BACKGROUND
+   ================================================= */
+
+.map {
+    position: absolute;
+    inset: 0 0 0;
+    background-color: #dce5df;
+    /* Decorative road pattern. */
+    background-image: linear-gradient( 27deg, transparent 47%, rgba(255, 255, 255, .9) 48%, rgba(255, 255, 255, .9) 51%, transparent 52% ), linear-gradient( 115deg, transparent 46%, rgba(255, 255, 255, .95) 47%, rgba(255, 255, 255, .95) 50%, transparent 51% ), linear-gradient( 0deg, transparent 48%, rgba(255, 255, 255, .75) 49%, rgba(255, 255, 255, .75) 51%, transparent 52% );
+    background-size: 260px 230px, 300px 270px, 180px 190px;
+    background-position: -35px 15px, 40px -30px, 20px 40px;
+}
+
+
+    /* Decorative green areas on the map. */
+    .map:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient( ellipse at 12% 23%, #b9d8c4 0 10%, transparent 10.5% ), radial-gradient( ellipse at 78% 42%, #b8d6c1 0 12%, transparent 12.5% ), radial-gradient( ellipse at 22% 76%, #c2ddc8 0 11%, transparent 11.5% ), radial-gradient( ellipse at 88% 82%, #b8d6c1 0 9%, transparent 9.5% );
+        opacity: .95;
+        /* Prevent the decorative layer from blocking clicks. */
+        pointer-events: none;
+    }
+
+
+/* =================================================
+   2. MAP ROADS
+   ================================================= */
+
+/* Shared road styling. */
+.road {
+    position: absolute;
+    height: 12px;
+    background: #fff;
+    border: 1px solid #cbd5cf;
+    border-radius: 20px;
+    opacity: .95;
+    transform-origin: center;
+}
+
+
+    /* Individual road positions and angles. */
+
+    .road.r1 {
+        width: 125%;
+        left: -12%;
+        top: 36%;
+        transform: rotate(-17deg);
+    }
+
+    .road.r2 {
+        width: 120%;
+        left: -10%;
+        top: 66%;
+        transform: rotate(24deg);
+        height: 9px;
+    }
+
+    .road.r3 {
+        width: 110%;
+        left: -4%;
+        top: 51%;
+        transform: rotate(78deg);
+        height: 8px;
+    }
+
+    .road.r4 {
+        width: 100%;
+        left: 2%;
+        top: 19%;
+        transform: rotate(8deg);
+        height: 7px;
+    }
+
+
+/* =================================================
+   3. MAP LOCATION LABELS
+   ================================================= */
+
+/* Shared road label styling. */
+.road-label {
+    position: absolute;
+    color: #82918a;
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+
+    /* Individual road label positions. */
+
+    .road-label.a {
+        top: 29%;
+        left: 9%;
+    }
+
+    .road-label.b {
+        top: 73%;
+        right: 9%;
+    }
+
+    .road-label.c {
+        top: 47%;
+        left: 62%;
+    }
+
+
+/* Park label styling. */
+.park-label {
+    position: absolute;
+    color: #6e9a7d;
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: .02em;
+}
+
+
+    /* Individual park label positions. */
+
+    .park-label.p1 {
+        top: 16%;
+        left: 8%;
+    }
+
+    .park-label.p2 {
+        top: 76%;
+        left: 15%;
+    }
+
+
+/* =================================================
+   4. MAP CONTROL BUTTONS
+   ================================================= */
+
+/* Container for map controls. */
+.map-tools {
+    position: absolute;
+    right: 15px;
+    top: 45%;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+
+/* Individual map control button. */
+.toolbtn {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .94);
+    color: #263640;
+    box-shadow: 0 5px 16px rgba(24, 43, 34, .16);
+    display: grid;
+    place-items: center;
+}
+
+
+    /* Icons inside map controls. */
+    .toolbtn svg {
+        width: 19px;
+        height: 19px;
+    }
+
+
+/* =================================================
+   5. EVENT MAP PINS
+   ================================================= */
+
+/*
+Each .pin represents an event location.
+
+JavaScript can position pins using absolute coordinates.
+The transform centers the pin horizontally and places
+its bottom tip at the specified coordinate.
+*/
+
+.pin {
+    position: absolute;
+    z-index: 4;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    transform: translate(-50%, -100%);
+    transition: opacity .18s, transform .18s;
+}
+
+
+    /* Hide pins that are filtered out. */
+    .pin.hidden {
+        display: none;
+    }
+
+
+    /* Main pin bubble. */
+    .pin .bubble {
+        width: 39px;
+        height: 39px;
+        border-radius: 50% 50% 50% 8px;
+        transform: rotate(-45deg);
+        background: var(--accent);
+        border: 3px solid white;
+        box-shadow: 0 5px 13px rgba(20, 38, 30, .28);
+        display: grid;
+        place-items: center;
+    }
+
+
+        /* Icon or text inside the pin bubble. */
+        .pin .bubble span {
+            transform: rotate(45deg);
+            font-size: 15px;
+        }
+
+
+    /* Selected event pin appearance. */
+    .pin.selected .bubble {
+        background: #172631;
+        transform: rotate(-45deg) scale(1.14);
+        box-shadow: 0 0 0 5px rgba(255, 90, 79, .2), 0 7px 18px rgba(20, 38, 30, .28);
+    }
+
+
+    /* Small event title displayed below the pin. */
+    .pin .pinlabel {
+        position: absolute;
+        top: 43px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        background: rgba(255, 255, 255, .93);
+        color: #263640;
+        border-radius: 7px;
+        padding: 4px 7px;
+        font-size: 9px;
+        font-weight: 800;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+    }
+
+
+/* =================================================
+   6. ADD EVENT PIN
+   ================================================= */
+
+/*
+The .addpin button starts the event creation process.
+
+It is positioned above the bottom navigation and
+can be dragged to select an event location.
+*/
+
+.addpin {
+    position: absolute;
+    right: 17px;
+    bottom: calc(100px + env(safe-area-inset-bottom));
+    z-index: 7;
+    width: 55px;
+    height: 55px;
+    border: 0;
+    border-radius: 19px;
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 9px 23px rgba(210, 65, 57, .35);
+    display: grid;
+    place-items: center;
+    /* Allows JavaScript to handle touch-based dragging. */
+    touch-action: none;
+}
+
+
+    /* Icon inside the add event button. */
+    .addpin svg {
+        width: 25px;
+        height: 25px;
+    }
+
+
+/* =================================================
+   7. SELECTED MAP COORDINATES
+   ================================================= */
+
+/*
+Displays the location selected by dragging the add pin.
+
+The JavaScript uses this area to show the selected
+location or its coordinates.
+*/
+
+.selected-location {
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #444;
+    border-radius: 8px;
+}
+
+
+    /* Supporting text inside the coordinate display. */
+    .selected-location p {
+        margin-bottom: 0;
+        font-size: 13px;
+        color: #aaa;
+    }

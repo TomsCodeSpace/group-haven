@@ -1,0 +1,607 @@
+﻿
+/*
+==================================================
+FILE: components.css
+
+PURPOSE:
+Controls the reusable interface components.
+
+RESPONSIBILITIES:
+- Header and branding
+- Location indicator
+- Date selector
+- Event information card
+- Event interaction buttons
+- Bottom navigation
+- Event creation modal and form
+- Toast notifications
+
+DEPENDENCIES:
+- main.css (global variables and layout)
+- map.css (map interface)
+
+==================================================
+*/
+
+
+/* =================================================
+   1. APPLICATION HEADER
+   ================================================= */
+
+.topbar {
+    position: absolute;
+    top: calc(env(safe-area-inset-top) + 12px);
+    left: 14px;
+    right: 14px;
+    z-index: 10;
+}
+
+
+/* Header row containing branding and location. */
+.brandrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+
+/* Application name and branding. */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #15232d;
+    font-weight: 850;
+    font-size: 20px;
+    letter-spacing: -.7px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
+}
+
+
+/* Small brand icon container. */
+.brandmark {
+    width: 30px;
+    height: 30px;
+    border-radius: 11px;
+    background: var(--accent);
+    display: grid;
+    place-items: center;
+    color: white;
+    box-shadow: 0 5px 14px rgba(255, 90, 79, .3);
+}
+
+
+    /* SVG icon inside the brand mark. */
+    .brandmark svg {
+        width: 18px;
+        height: 18px;
+    }
+
+
+/* Current location indicator. */
+.location-pill {
+    border: 1px solid rgba(22, 35, 44, .12);
+    background: rgba(255, 255, 255, .88);
+    backdrop-filter: blur(12px);
+    border-radius: 30px;
+    padding: 9px 12px;
+    color: #263640;
+    font-size: 11px;
+    font-weight: 750;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(29, 48, 39, .08);
+}
+
+
+    /* Icon inside the location indicator. */
+    .location-pill svg {
+        width: 13px;
+        height: 13px;
+    }
+
+
+/* =================================================
+   2. DATE SELECTOR
+   ================================================= */
+
+/* Main date selector container. */
+.datepanel {
+    background: rgba(17, 29, 39, .94);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 18px;
+    padding: 12px 13px 11px;
+    box-shadow: var(--shadow);
+    color: white;
+}
+
+
+/* Date selector heading. */
+.datehead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 9px;
+}
+
+
+    /* Main date heading text. */
+    .datehead strong {
+        font-size: 13px;
+        letter-spacing: .01em;
+    }
+
+
+    /* Secondary date heading text. */
+    .datehead span {
+        font-size: 10px;
+        color: #a7b7c2;
+    }
+
+
+/* Container holding individual date buttons. */
+.dates {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+/* Individual date button. */
+.datebtn {
+    border: 1px solid rgba(255, 255, 255, .11);
+    background: #202f3b;
+    color: #dce6ec;
+    border-radius: 12px;
+    min-width: 0;
+    flex: 1;
+    height: 53px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+
+    /* Smaller weekday text. */
+    .datebtn small {
+        font-size: 9px;
+        color: #9eafba;
+        font-weight: 700;
+    }
+
+
+    /* Main date number. */
+    .datebtn b {
+        font-size: 15px;
+    }
+
+
+    /* Currently selected date. */
+    .datebtn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+        box-shadow: 0 5px 14px rgba(255, 90, 79, .24);
+    }
+
+
+        /* Weekday text when its date is selected. */
+        .datebtn.active small {
+            color: #ffe4e1;
+        }
+
+
+/* Supporting text beneath the date selector. */
+.datehint {
+    font-size: 9px;
+    color: #92a3af;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* =================================================
+   3. EVENT INFORMATION CARD
+   ================================================= */
+
+/*
+The event card displays information about a selected pin.
+
+JavaScript controls visibility by adding or removing
+the .show class.
+*/
+
+.eventcard {
+    position: absolute;
+    z-index: 8;
+    left: 14px;
+    right: 14px;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    background: #15222d;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 21px;
+    padding: 15px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .35);
+    display: none;
+    animation: rise .2s ease-out;
+}
+
+
+    /* Display the card when an event is selected. */
+    .eventcard.show {
+        display: block;
+    }
+
+
+/* Animation for the event card appearing. */
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Top row containing category and close button. */
+.cardtop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+
+/* Event category indicator. */
+.category {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(121, 223, 189, .12);
+    color: var(--mint);
+    padding: 5px 8px;
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+
+/* Close button on the event card. */
+.close {
+    border: 0;
+    background: rgba(255, 255, 255, .08);
+    color: #c8d3da;
+    border-radius: 9px;
+    width: 27px;
+    height: 27px;
+    font-size: 17px;
+    line-height: 1;
+}
+
+
+/* Event title. */
+.eventcard h2 {
+    font-size: 18px;
+    line-height: 1.15;
+    margin: 10px 0 5px;
+    letter-spacing: -.4px;
+}
+
+
+/* Event description. */
+.description {
+    font-size: 11px;
+    line-height: 1.5;
+    color: #aebdc7;
+    margin: 0 0 12px;
+}
+
+
+/* Grid containing event details. */
+.details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 13px;
+}
+
+
+/* Individual event detail row. */
+.detail {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #d5dfe5;
+    font-size: 10px;
+    min-width: 0;
+}
+
+
+    /* Icons inside event details. */
+    .detail svg {
+        width: 14px;
+        height: 14px;
+        color: #9aabb8;
+        flex-shrink: 0;
+    }
+
+
+    /* Prevent long event details from overflowing. */
+    .detail span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+
+/* =================================================
+   4. EVENT CARD ACTION BUTTONS
+   ================================================= */
+
+/* Container for event interaction buttons. */
+.cardactions {
+    display: flex;
+    gap: 9px;
+}
+
+
+/* Main event participation button. */
+.addme {
+    flex: 1;
+    border: 0;
+    background: var(--accent);
+    color: white;
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 850;
+    font-size: 12px;
+}
+
+
+    /* Appearance after the user joins an event. */
+    .addme.joined {
+        background: #235c4e;
+        color: #baf3df;
+    }
+
+
+/* Share event button. */
+.share {
+    width: 43px;
+    border: 1px solid rgba(255, 255, 255, .13);
+    background: #22313d;
+    color: #e5edf1;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+}
+
+
+    /* Share button icon. */
+    .share svg {
+        width: 17px;
+        height: 17px;
+    }
+
+
+/* =================================================
+   5. BOTTOM NAVIGATION
+   ================================================= */
+
+/* Main navigation bar. */
+.bottomnav {
+    position: absolute;
+    z-index: 9;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(72px + env(safe-area-inset-bottom));
+    padding: 9px 22px calc(9px + env(safe-area-inset-bottom));
+    background: rgba(17, 29, 39, .97);
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+/* Individual navigation item. */
+.navitem {
+    border: 0;
+    background: transparent;
+    color: #8495a2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 54px;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+
+    /* Navigation icons. */
+    .navitem svg {
+        width: 20px;
+        height: 20px;
+    }
+
+
+    /* Currently selected navigation item. */
+    .navitem.active {
+        color: #ff746b;
+    }
+
+
+        /* Glow effect on the active navigation icon. */
+        .navitem.active svg {
+            filter: drop-shadow(0 0 5px rgba(255, 90, 79, .25));
+        }
+
+
+/* =================================================
+   6. EVENT CREATION MODAL
+   ================================================= */
+
+/*
+The modal backdrop covers the application when
+the user opens the event creation interface.
+
+JavaScript toggles the .open class.
+*/
+
+.modalback {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: rgba(4, 10, 15, .62);
+    display: none;
+    align-items: flex-end;
+    padding: 12px;
+}
+
+
+    /* Display the modal backdrop when activated. */
+    .modalback.open {
+        display: flex;
+    }
+
+
+/* Main modal window. */
+.modal {
+    width: 100%;
+    background: #17232e;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 22px;
+    padding: 18px;
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+
+/* Modal heading row. */
+.modalhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+
+    /* Modal title. */
+    .modalhead h3 {
+        margin: 0;
+        font-size: 17px;
+    }
+
+
+/* =================================================
+   7. EVENT CREATION FORM
+   ================================================= */
+
+/* Main form layout. */
+.formgrid {
+    display: grid;
+    gap: 10px;
+}
+
+
+/* Individual form field container. */
+.field label {
+    display: block;
+    color: #9eafba;
+    font-size: 10px;
+    font-weight: 750;
+    margin: 0 0 5px;
+}
+
+
+/* Shared input, textarea, and dropdown styling. */
+.field input,
+.field textarea,
+.field select {
+    width: 100%;
+    background: #22313d;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 10px;
+    padding: 11px;
+    color: white;
+    outline: none;
+    font-size: 12px;
+}
+
+
+/* Event description input. */
+.field textarea {
+    resize: vertical;
+    min-height: 55px;
+}
+
+
+/* Form row for two side-by-side fields. */
+.formrow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+
+/* Submit event button. */
+.submit {
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+    background: var(--accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 850;
+    padding: 13px;
+    margin-top: 4px;
+}
+
+
+/* =================================================
+   8. TOAST NOTIFICATIONS
+   ================================================= */
+
+/*
+Toast messages provide short feedback to the user.
+
+JavaScript toggles the .show class to display them.
+*/
+
+.toast {
+    position: absolute;
+    z-index: 30;
+    top: calc(env(safe-area-inset-top) + 170px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #17232e;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 30px;
+    padding: 10px 14px;
+    font-size: 11px;
+    box-shadow: var(--shadow);
+    display: none;
+    white-space: nowrap;
+}
+
+
+    /* Display notification when activated. */
+    .toast.show {
+        display: block;
+    }
